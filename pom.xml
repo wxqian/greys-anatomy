@@ -13,6 +13,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
     </properties>
 
 
@@ -141,20 +143,32 @@
             <!--</dependency>-->
 
             <!--<dependency>-->
-                <!--<groupId>org.mozilla</groupId>-->
-                <!--<artifactId>rhino</artifactId>-->
-                <!--<version>1.7.7.1</version>-->
+            <!--<groupId>org.mozilla</groupId>-->
+            <!--<artifactId>rhino</artifactId>-->
+            <!--<version>1.7.7.1</version>-->
             <!--</dependency>-->
             <!--<dependency>-->
-                <!--<groupId>de.christophkraemer</groupId>-->
-                <!--<artifactId>rhino-script-engine</artifactId>-->
-                <!--<version>1.1.0</version>-->
+            <!--<groupId>de.christophkraemer</groupId>-->
+            <!--<artifactId>rhino-script-engine</artifactId>-->
+            <!--<version>1.1.0</version>-->
             <!--</dependency>-->
+
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-all</artifactId>
+                <version>4.1.9.Final</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.ompc.greys</groupId>
+                <artifactId>common</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
     <modules>
         <module>core</module>
         <module>agent</module>
+        <module>common</module>
     </modules>
 </project>

@@ -16,10 +16,10 @@ import com.github.ompc.greys.core.exception.CommandInitializationException;
 import com.github.ompc.greys.core.exception.CommandNotFoundException;
 import com.github.ompc.greys.core.exception.GaExecuteException;
 import com.github.ompc.greys.core.util.GaStringUtils;
-import com.github.ompc.greys.core.util.LogUtil;
 import com.github.ompc.greys.core.util.affect.Affect;
 import com.github.ompc.greys.core.util.affect.EnhancerAffect;
 import com.github.ompc.greys.core.util.affect.RowAffect;
+import fx.greys.fork.common.util.LogUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 

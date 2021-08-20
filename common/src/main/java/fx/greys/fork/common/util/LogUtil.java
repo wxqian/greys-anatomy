@@ -1,4 +1,4 @@
-package com.github.ompc.greys.core.util;
+package fx.greys.fork.common.util;
 
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.joran.JoranConfigurator;
@@ -22,7 +22,7 @@ public class LogUtil {
         loggerContext.reset();
         try {
 
-            configurator.doConfigure(LogUtil.class.getResourceAsStream("/com/github/ompc/greys/core/res/greys-logback.xml"));
+            configurator.doConfigure(LogUtil.class.getResourceAsStream("/fx/greys/fork/common/res/greys-logback.xml"));
         } catch (JoranException e) {
             throw new RuntimeException("load logback config failed, you need restart greys", e);
         } finally {

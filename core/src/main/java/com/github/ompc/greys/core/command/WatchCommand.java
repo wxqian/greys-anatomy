@@ -10,11 +10,11 @@ import com.github.ompc.greys.core.exception.ExpressException;
 import com.github.ompc.greys.core.server.Session;
 import com.github.ompc.greys.core.textui.ext.TObject;
 import com.github.ompc.greys.core.util.InvokeCost;
-import com.github.ompc.greys.core.util.LogUtil;
 import com.github.ompc.greys.core.util.PointCut;
 import com.github.ompc.greys.core.util.matcher.ClassMatcher;
 import com.github.ompc.greys.core.util.matcher.GaMethodMatcher;
 import com.github.ompc.greys.core.util.matcher.PatternMatcher;
+import fx.greys.fork.common.util.LogUtil;
 import org.slf4j.Logger;
 
 import java.lang.instrument.Instrumentation;

@@ -2,7 +2,7 @@ package com.github.ompc.greys.core.server;
 
 import com.github.ompc.greys.core.GlobalOptions;
 import com.github.ompc.greys.core.advisor.AdviceWeaver;
-import com.github.ompc.greys.core.util.LogUtil;
+import fx.greys.fork.common.util.LogUtil;
 import org.slf4j.Logger;
 
 import java.nio.channels.SocketChannel;

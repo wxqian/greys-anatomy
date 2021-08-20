@@ -5,7 +5,7 @@ import com.github.ompc.greys.core.Configure;
 import com.github.ompc.greys.core.manager.ReflectManager;
 import com.github.ompc.greys.core.manager.TimeFragmentManager;
 import com.github.ompc.greys.core.util.GaCheckUtils;
-import com.github.ompc.greys.core.util.LogUtil;
+import fx.greys.fork.common.util.LogUtil;
 import org.slf4j.Logger;
 
 import java.io.IOException;

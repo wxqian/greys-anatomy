@@ -4,11 +4,11 @@ import com.github.ompc.greys.core.advisor.Enhancer;
 import com.github.ompc.greys.core.command.annotation.Cmd;
 import com.github.ompc.greys.core.manager.ReflectManager;
 import com.github.ompc.greys.core.server.Session;
-import com.github.ompc.greys.core.util.LogUtil;
 import com.github.ompc.greys.core.util.affect.EnhancerAffect;
 import com.github.ompc.greys.core.util.affect.RowAffect;
 import com.github.ompc.greys.core.util.matcher.ClassMatcher;
 import com.github.ompc.greys.core.util.matcher.PatternMatcher;
+import fx.greys.fork.common.util.LogUtil;
 import org.slf4j.Logger;
 
 import java.lang.instrument.Instrumentation;
