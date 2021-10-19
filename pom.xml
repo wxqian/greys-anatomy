@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.github.ompc.greys</groupId>
+    <groupId>fx.github.greys</groupId>
     <artifactId>greys</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
@@ -159,7 +159,7 @@
                 <version>4.1.9.Final</version>
             </dependency>
             <dependency>
-                <groupId>com.github.ompc.greys</groupId>
+                <groupId>fx.github.greys</groupId>
                 <artifactId>common</artifactId>
                 <version>1.0.0-SNAPSHOT</version>
             </dependency>
@@ -170,5 +170,6 @@
         <module>core</module>
         <module>agent</module>
         <module>common</module>
+        <module>servlets</module>
     </modules>
 </project>
