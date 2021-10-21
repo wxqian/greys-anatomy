@@ -1,7 +1,5 @@
 package fx.github.greys.servlets.utils;
 
-import org.springframework.core.annotation.AnnotationAwareOrderComparator;
-
 import javax.servlet.ServletContainerInitializer;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -41,7 +39,6 @@ public class GreysServletContainerInitializer implements ServletContainerInitial
         }
 
         servletContext.log(initializers.size() + "GreysServletInitializer detected on classpath");
-        AnnotationAwareOrderComparator.sort(initializers);
         for (GreysServletInitializer initializer : initializers) {
             initializer.onStartup(servletContext);
         }
