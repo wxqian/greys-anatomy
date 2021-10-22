@@ -171,5 +171,6 @@
         <module>agent</module>
         <module>common</module>
         <module>servlets</module>
+        <module>console</module>
     </modules>
 </project>

@@ -41,7 +41,12 @@ public class AttachServlet extends HttpServlet {
      */
     private static final String NO_ATTACH_SERVER_DEFINED = "no attach server defined";
 
+    /**
+     * vm class
+     */
     private static final String vmClassName = "com.sun.tools.attach.VirtualMachine";
+
+    private static final String OPTIONS = "%s;serverHost=%s;serverPort=%s";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -73,9 +78,9 @@ public class AttachServlet extends HttpServlet {
             Class vmClazz = getClass().getClassLoader().loadClass(vmClassName);
             Method attach = vmClazz.getMethod("attach", String.class);
             detach = vmClazz.getMethod("detach");
-            Method loadAgent = vmClazz.getMethod("loadAgent", String.class);
+            Method loadAgent = vmClazz.getMethod("loadAgent", String.class, String.class);
             obj = attach.invoke(null, pid);
-            loadAgent.invoke(obj, filePath);
+            loadAgent.invoke(obj, filePath, String.format(OPTIONS, filePath, serverHost, serverPort));
         } catch (Exception e) {
             logger.error("attach server occurs exception.", e);
             writer.println(String.format(ATTACH_FAIL_MESSAGE, ERROR_CODE, e.getMessage()));

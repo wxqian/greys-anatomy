@@ -26,7 +26,7 @@ public class MessageEncoder extends MessageToByteEncoder {
             byteBuf.writeInt(totalLength);
             byteBuf.writeInt(headLength);
             byteBuf.writeBytes(hostBytes);
-            byteBuf.writeInt(message.getPort());
+            byteBuf.writeInt(message.getPid());
             byteBuf.writeBytes(bodyBytes);
         }
     }

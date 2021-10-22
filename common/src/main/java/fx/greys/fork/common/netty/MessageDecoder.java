@@ -55,14 +55,14 @@ public class MessageDecoder extends LengthFieldBasedFrameDecoder {
         byte[] hostBytes = new byte[headLength - 8];
         frame.readBytes(hostBytes);
         String host = new String(hostBytes);
-        int port = frame.readInt();
+        int pid = frame.readInt();
         int bodyLength = totalLength - magic.length - 4 - headLength;
         byte[] bodyBytes = new byte[bodyLength];
         frame.readBytes(bodyBytes);
         String commandLine = new String(bodyBytes);
         GreysMessage message = new GreysMessage();
         message.setHost(host);
-        message.setPort(port);
+        message.setPid(pid);
         message.setCommandLine(commandLine);
         return message;
     }

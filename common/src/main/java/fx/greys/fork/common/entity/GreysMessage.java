@@ -7,7 +7,7 @@ public class GreysMessage implements Serializable {
 
     private String host;
 
-    private int port;
+    private int pid;
 
     private String commandLine;
 
@@ -19,12 +19,12 @@ public class GreysMessage implements Serializable {
         this.host = host;
     }
 
-    public int getPort() {
-        return port;
+    public int getPid() {
+        return pid;
     }
 
-    public void setPort(int port) {
-        this.port = port;
+    public void setPid(int pid) {
+        this.pid = pid;
     }
 
     public String getCommandLine() {
