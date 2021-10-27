@@ -1,11 +1,18 @@
-import logo from './logo.svg';
+import React,{Component} from 'react';
 import './App.css';
-import XtermTest from './XtermTest';
+import {Route,Switch} from 'react-router-dom'
+import './assets/font/iconfont.css'
+import Login from './routes/Login/index'
 
-function App() {
-  return (
-    <XtermTest id="net1" />
-  );
+class App extends Component{
+  render(){
+    return (
+      <Switch>
+        <Route path='/login' component={Login}/>
+        {/* <PrivateRoute path='/' component={Index}/> */}
+      </Switch>
+    )
+  }
 }
 
 export default App;
