@@ -12,3 +12,4 @@
 /greys.iml
 /nb-configuration.xml
 *.iml
+*/target/
