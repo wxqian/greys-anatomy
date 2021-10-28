@@ -3,10 +3,10 @@ import BGParticle from '../../utils/BGParticle'
 import { notification } from 'antd'
 import './style.css'
 import { withRouter } from 'react-router-dom'
-import { inject, observer } from 'mobx-react/index'
+import { inject, observer } from 'mobx-react'
 // import Loading2 from '../../components/Loading2'
 import {preloadingImages} from '../../utils/utils'
-import 'animate.css'
+// import 'animate.css'
 import LoginForm from './LoginForm'
 import RegisterForm from './RegisterForm'
 
@@ -26,7 +26,7 @@ const imgs = [
 class Login extends React.Component {
   state = {
     showBox: 'login',   //展示当前表单
-    url: '',  //背景图片
+
     loading:false,
     loading2:false,
   }
@@ -51,10 +51,9 @@ class Login extends React.Component {
       loading:true
     })
     this.props.appStore.initUsers()
-    this.loadImageAsync(url).then(url=>{
+    this.loadImageAsync(bgImg).then(bgImg=>{
       this.setState({
-        loading:false,
-        url
+        loading:false
       })
     }).then(()=>{
       //为什么写在then里？id为backgroundBox的DOM元素是在loading为false时才有，而上面的setState可能是异步的，必须等到setState执行完成后才去获取dom

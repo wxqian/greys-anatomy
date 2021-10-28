@@ -1,4 +1,4 @@
-import appStore from './appStore'
+import appStore from './AppStore'
 
 const store = {
   appStore

@@ -1,12 +1,12 @@
 import React from 'react'
 import { randomNum, calculateWidth } from '../../utils/utils'
 import { withRouter } from 'react-router-dom'
-import { inject, observer } from 'mobx-react/index'
+import { inject, observer } from 'mobx-react'
 import { Form, Input, Row, Col } from 'antd'
 // import PromptBox from '../../components/PromptBox'
 
 
-@withRouter @inject('appStore') @observer @Form.create()
+@withRouter @inject('appStore')
 class LoginForm extends React.Component {
   state = {
     focusItem: -1,   //保存当前聚焦的input
@@ -105,19 +105,24 @@ class LoginForm extends React.Component {
   }
 
   render () {
-    const {getFieldDecorator, getFieldError} = this.props.form
     const {focusItem, code} = this.state
     return (
       <div className={this.props.className}>
         <h3 className='title'>管理员登录</h3>
         <Form onSubmit={this.loginSubmit}>
-          <Form.Item help={getFieldError('username') 
+          <Form.Item 
+        //   help={getFieldError('username') 
         //   &&
         //   <PromptBox info={getFieldError('username')} width={calculateWidth(getFieldError('username'))}/>
-          }>
-            {getFieldDecorator('username', {
-              rules: [{required: true, message: '请输入用户名'}]
-            })(
+        //   }
+        rules={[
+            {
+              required: true,
+              message: '请输入用户名',
+            },
+          ]}
+          >
+            {(
               <Input
                 onFocus={() => this.setState({focusItem: 0})}
                 onBlur={() => this.setState({focusItem: -1})}
@@ -126,13 +131,19 @@ class LoginForm extends React.Component {
                 addonBefore={<span className='iconfont icon-User' style={focusItem === 0 ? styles.focus : {}}/>}/>
             )}
           </Form.Item>
-          <Form.Item help={getFieldError('password') 
+          <Form.Item 
+        //   help={getFieldError('password') 
         //   &&
         //   <PromptBox info={getFieldError('password')} width={calculateWidth(getFieldError('password'))}/>
-          }>
-            {getFieldDecorator('password', {
-              rules: [{required: true, message: '请输入密码'}]
-            })(
+        //   }
+        rules={[
+            {
+              required: true,
+              message: '请输入密码',
+            },
+          ]}
+          >
+            {(
               <Input
                 onFocus={() => this.setState({focusItem: 1})}
                 onBlur={() => this.setState({focusItem: -1})}
@@ -142,24 +153,19 @@ class LoginForm extends React.Component {
                 addonBefore={<span className='iconfont icon-suo1' style={focusItem === 1 ? styles.focus : {}}/>}/>
             )}
           </Form.Item>
-          <Form.Item help={getFieldError('verification') 
+          <Form.Item 
+        //   help={getFieldError('verification') 
         //   &&
         //   <PromptBox info={getFieldError('verification')} width={calculateWidth(getFieldError('verification'))}/>
-          }>
-            {getFieldDecorator('verification', {
-              validateFirst: true,
-              rules: [
-                {required: true, message: '请输入验证码'},
-                {
-                  validator: (rule, value, callback) => {
-                    if (value.length >= 4 && code.toUpperCase() !== value.toUpperCase()) {
-                      callback('验证码错误')
-                    }
-                    callback()
-                  }
-                }
-              ]
-            })(
+        //   }
+        rules={[
+            {
+              required: true,
+              message: '请输入验证码',
+            },
+          ]}
+        >
+            {(
               <Row>
                 <Col span={15}>
                   <Input
