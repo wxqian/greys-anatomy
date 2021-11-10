@@ -172,5 +172,6 @@
         <module>common</module>
         <module>servlets</module>
         <module>console</module>
+        <module>web</module>
     </modules>
 </project>
