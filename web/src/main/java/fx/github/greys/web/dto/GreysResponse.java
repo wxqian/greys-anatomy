@@ -11,18 +11,18 @@ public class GreysResponse<T> {
 
     private String code;
 
-    private T data;
+    private T result;
 
     private String message;
 
-    public GreysResponse(String code, T data) {
+    public GreysResponse(String code, T result) {
         this.code = code;
-        this.data = data;
+        this.result = result;
     }
 
-    public GreysResponse(String code, T data, String message) {
+    public GreysResponse(String code, T result, String message) {
         this.code = code;
-        this.data = data;
+        this.result = result;
         this.message = message;
     }
 
@@ -43,8 +43,8 @@ public class GreysResponse<T> {
         return new GreysResponse(SUCCESS, message);
     }
 
-    public static <T> GreysResponse<T> createSuccess(T data, String message) {
-        return new GreysResponse(SUCCESS, data, message);
+    public static <T> GreysResponse<T> createSuccess(T result, String message) {
+        return new GreysResponse(SUCCESS, result, message);
     }
 
     public static <T> GreysResponse<T> createSuccess() {

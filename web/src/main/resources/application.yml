@@ -1,5 +1,8 @@
 server:
   port: 8085
+  servlet:
+    session:
+      timeout: 1800
 
 #h2配置
 spring:
@@ -8,16 +11,16 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: update  #设置ddl模式
-##数据库连接设置
+  ##数据库连接设置
   datasource:
     url: jdbc:h2:file:./db/greys #配置h2数据库的连接地址
     username: sa  #配置数据库用户名
     password: sa  #配置数据库密码
     driverClassName: org.h2.Driver  #配置JDBC Driver
-##数据初始化设置
-   # schema: classpath:db/schema.sql  #进行该配置后，每次启动程序，程序都会运行resources/db/schema.sql文件，对数据库的结构进行操作。
+    ##数据初始化设置
+    # schema: classpath:db/schema.sql  #进行该配置后，每次启动程序，程序都会运行resources/db/schema.sql文件，对数据库的结构进行操作。
     # data: classpath:db/data.sql  #进行该配置后，每次启动程序，程序都会运行resources/db/data.sql文件，对数据库的数据操作。
-##h2 web console设置
+    ##h2 web console设置
     platform: h2  #表明使用的数据库平台是h2
   h2:
   console:
@@ -32,3 +35,11 @@ spring:
       root: INFO
       org:
         hibernate: INFO
+
+#白名单url配置
+greys:
+  web:
+    white-urls:
+      -/api/login
+      -/h2-console
+      -/swagger-ui/index.html
