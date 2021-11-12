@@ -5,10 +5,14 @@ import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.Contact;
+import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Configuration
 public class SwaggerConfig {
@@ -17,9 +21,9 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.OAS_30)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("fx.github.greys.web.ctrl.system"))
+                .apis(RequestHandlerSelectors.basePackage("fx.github.greys.web.ctrl"))
                 .paths(PathSelectors.any())
-                .build();
+                .build().securitySchemes(securitySchemes()).securityContexts(securityContexts());
     }
 
     private ApiInfo apiInfo() {
@@ -30,5 +34,22 @@ public class SwaggerConfig {
                 .contact(new Contact("name", "个人主页url", "email"))
                 .version("1.0")//版本
                 .build();
+    }
+
+    private List<SecurityScheme> securitySchemes() {
+        List<SecurityScheme> apiKeyList = new ArrayList();
+        apiKeyList.add(new ApiKey("token", "token", "header"));
+        return apiKeyList;
+    }
+
+    private List<SecurityContext> securityContexts() {
+        return Collections.singletonList(
+                SecurityContext.builder()
+                        .securityReferences(
+                                Collections.singletonList(
+                                        new SecurityReference(
+                                                "token",
+                                                new AuthorizationScope[]{new AuthorizationScope("global", "accessEverything")})))
+                        .build());
     }
 }

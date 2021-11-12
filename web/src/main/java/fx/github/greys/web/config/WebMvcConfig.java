@@ -18,7 +18,7 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
     protected void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(loginInterceptor).
                 addPathPatterns("/**").
-                excludePathPatterns("/swagger*/**","/v3/**");
+                excludePathPatterns("/swagger*/**", "/v3/**");
     }
 
     @Override
@@ -32,8 +32,7 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/swagger-ui/")
-                .setViewName("forward:/swagger-ui/index.html");
+        registry.addViewController("/swagger-ui/");
     }
 }
 

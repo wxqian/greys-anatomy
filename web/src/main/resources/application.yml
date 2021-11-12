@@ -39,7 +39,4 @@ spring:
 #白名单url配置
 greys:
   web:
-    white-urls:
-      -/api/login
-      -/h2-console
-      -/swagger-ui/index.html
+    white-urls: /api/login,/h2-console,/swagger-ui/index.html

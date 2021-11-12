@@ -85,11 +85,26 @@ public class UserService {
         UserDto dto = new UserDto();
         dto.setId(user.getId());
         dto.setUsername(user.getUsername());
+        dto.setToken(getToken(user));
         return dto;
     }
 
+    /**
+     * 获取token
+     *
+     * @param user
+     * @return
+     */
     public String getToken(User user) {
         return JWT.create().withAudience(user.getUsername())
                 .sign(Algorithm.HMAC256(user.getPassword()));
+    }
+
+    /**
+     * @param username
+     * @return
+     */
+    public User findUserByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 }

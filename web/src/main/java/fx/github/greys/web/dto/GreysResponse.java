@@ -35,9 +35,10 @@ public class GreysResponse<T> {
         this.code = code;
     }
 
-    private static final String SUCCESS = "200";
+    private static final String SUCCESS = "0";
+    private static final String FAIL = "1";
+    private static final String TIMEOUT = "10042";
 
-    private static final String FAIL = "400";
 
     public static <T> GreysResponse<T> createSuccess(String message) {
         return new GreysResponse(SUCCESS, message);
@@ -57,5 +58,9 @@ public class GreysResponse<T> {
 
     public static <T> GreysResponse<T> createError() {
         return new GreysResponse(FAIL);
+    }
+
+    public static <T> GreysResponse<T> createTimeout() {
+        return new GreysResponse(TIMEOUT);
     }
 }

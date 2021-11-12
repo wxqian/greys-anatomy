@@ -1,73 +1,86 @@
 package fx.github.greys.web.interceptor;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTDecodeException;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.google.common.collect.Sets;
+import fx.github.greys.web.dto.GreysResponse;
+import fx.github.greys.web.entity.system.User;
 import fx.github.greys.web.service.UserService;
+import fx.github.greys.web.utils.JacksonUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.web.method.HandlerMethod;
+import org.springframework.util.AntPathMatcher;
+import org.springframework.util.PathMatcher;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.lang.reflect.Method;
 import java.util.Set;
+
+import static fx.github.greys.web.constant.Constants.COMMA;
 
 @Slf4j
 @Component
-public class LoginInterceptor implements HandlerInterceptor {
+public class LoginInterceptor implements HandlerInterceptor, InitializingBean {
 
     @Value("${greys.web.white-urls}")
+    private String urls;
+
     private Set<String> whiteUrls;
 
     @Autowired
     UserService userService;
+
+    private PathMatcher pathMatcher = new AntPathMatcher();
+
     @Override
-    public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object object) throws Exception {
-        String token = httpServletRequest.getHeader("token");// 从 http 请求头中取出 token
-        // 如果不是映射到方法直接通过
-        if(!(object instanceof HandlerMethod)){
-            return true;
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object object) throws Exception {
+        String token = request.getHeader("token");// 从 http 请求头中取出 token
+        String url = request.getRequestURI();
+        for (String white : whiteUrls) {
+            if (pathMatcher.match(white, url)) {
+                //若在白名单中，不在校验token
+                return true;
+            }
         }
-        HandlerMethod handlerMethod=(HandlerMethod)object;
-        Method method=handlerMethod.getMethod();
-        //检查是否有passtoken注释，有则跳过认证
-//        if (method.isAnnotationPresent(PassToken.class)) {
-//            PassToken passToken = method.getAnnotation(PassToken.class);
-//            if (passToken.required()) {
-//                return true;
-//            }
-//        }
-        //检查有没有需要用户权限的注解
-//        if (method.isAnnotationPresent(UserLoginToken.class)) {
-//            UserLoginToken userLoginToken = method.getAnnotation(UserLoginToken.class);
-//            if (userLoginToken.required()) {
-//                // 执行认证
-//                if (token == null) {
-//                    throw new RuntimeException("无token，请重新登录");
-//                }
-//                // 获取 token 中的 user id
-//                String userId;
-//                try {
-//                    userId = JWT.decode(token).getAudience().get(0);
-//                } catch (JWTDecodeException j) {
-//                    throw new RuntimeException("401");
-//                }
-//                User user = userService.findUserById(userId);
-//                if (user == null) {
-//                    throw new RuntimeException("用户不存在，请重新登录");
-//                }
-//                // 验证 token
-//                JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(user.getPassword())).build();
-//                try {
-//                    jwtVerifier.verify(token);
-//                } catch (JWTVerificationException e) {
-//                    throw new RuntimeException("401");
-//                }
-//                return true;
-//            }
-//        }
+        //不在白名单中，需要验证token
+        if (StringUtils.isBlank(token) || !validateToken(token)) {
+            response.getWriter().println(JacksonUtils.toJSon(GreysResponse.createTimeout()));
+            return false;
+        }
         return true;
+    }
+
+    /**
+     * 验证token
+     *
+     * @param token
+     * @return
+     */
+    private boolean validateToken(String token) {
+        try {
+            //获取 token 中的 user id
+            String userId = JWT.decode(token).getAudience().get(0);
+            User user = userService.findUserByUsername(userId);
+            JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(user.getPassword())).build();
+            jwtVerifier.verify(token);
+        } catch (Exception e) {
+            log.error("validate token occurs exception.", e);
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void afterPropertiesSet() {
+        String[] urlArr = StringUtils.split(urls, COMMA);
+        whiteUrls = Sets.newHashSet(urlArr);
     }
 }
