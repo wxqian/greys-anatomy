@@ -9,10 +9,14 @@ import fx.github.greys.web.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.List;
+import java.util.Date;
+
+import static fx.github.greys.web.constant.Constants.TOKEN_EXPIRE_TIME;
 
 /**
  * 用户操作类
@@ -47,10 +51,10 @@ public class UserService {
      *
      * @return
      */
-    public GreysResponse<List<User>> listUser() {
-        GreysResponse<List<User>> result = GreysResponse.createSuccess();
+    public GreysResponse<Page<User>> pageUser(Pageable pageable) {
+        GreysResponse<Page<User>> result = GreysResponse.createSuccess();
         try {
-            List<User> users = userRepository.findAll();
+            Page<User> users = userRepository.findAll(pageable);
             result.setResult(users);
         } catch (Exception e) {
             result = GreysResponse.createError("list user occurs error");
@@ -97,6 +101,7 @@ public class UserService {
      */
     public String getToken(User user) {
         return JWT.create().withAudience(user.getUsername())
+                .withExpiresAt(new Date(System.currentTimeMillis() + TOKEN_EXPIRE_TIME))
                 .sign(Algorithm.HMAC256(user.getPassword()));
     }
 
@@ -106,5 +111,22 @@ public class UserService {
      */
     public User findUserByUsername(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    /**
+     * 删除用户
+     *
+     * @param userId
+     * @return
+     */
+    public GreysResponse<String> deleteUser(Long userId) {
+        GreysResponse<String> result = GreysResponse.createSuccess();
+        try {
+            userRepository.deleteById(userId);
+        } catch (Exception e) {
+            result = GreysResponse.createError("delete user occurs error.");
+            log.error("delete user occurs exception.userId:{}", userId, e);
+        }
+        return result;
     }
 }
