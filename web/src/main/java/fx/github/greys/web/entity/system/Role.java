@@ -19,12 +19,12 @@ public class Role implements Serializable {
     @Column(name = "name", length = 50)
     private String name;
 
-    @Column(name = "desc", length = 255)
+    @Column(name = "desc")
     private String desc;
 
     //状态 0 已删除 1 使用中
     @Column(name = "status", columnDefinition = "int default 1")
-    private int status;
+    private int status = 1;
 
     @Column
     private long createTime = System.currentTimeMillis();

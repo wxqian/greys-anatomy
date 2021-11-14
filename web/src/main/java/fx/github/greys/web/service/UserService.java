@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import fx.github.greys.web.dto.GreysResponse;
 import fx.github.greys.web.dto.UserDto;
+import fx.github.greys.web.vo.UserVo;
 import fx.github.greys.web.entity.system.User;
 import fx.github.greys.web.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -31,12 +32,15 @@ public class UserService {
     /**
      * 用户添加
      *
-     * @param user
+     * @param dto
      * @return
      */
-    public GreysResponse<String> addUser(@RequestBody User user) {
+    public GreysResponse<String> addUser(@RequestBody UserDto dto) {
         GreysResponse<String> result = GreysResponse.createSuccess();
         try {
+            User user = new User();
+            user.setUsername(dto.getUsername());
+            user.setPassword(dto.getPassword());
             userRepository.save(user);
         } catch (Exception e) {
             result = GreysResponse.createError("add user occurs error");
@@ -70,9 +74,9 @@ public class UserService {
      * @param password
      * @return
      */
-    public GreysResponse<UserDto> login(String username, String password) {
+    public GreysResponse<UserVo> login(String username, String password) {
         log.info("user login .username:{}", username);
-        GreysResponse<UserDto> result = GreysResponse.createError("username or password not correct.");
+        GreysResponse<UserVo> result = GreysResponse.createError("username or password not correct.");
         if (StringUtils.isAnyBlank(username, password)) {
             return result;
         }
@@ -80,13 +84,13 @@ public class UserService {
         if (user == null || !StringUtils.equals(user.getPassword(), password)) {
             return result;
         }
-        UserDto dto = convertToDto(user);
+        UserVo dto = convertToDto(user);
         result = GreysResponse.createSuccess(dto, "success");
         return result;
     }
 
-    private UserDto convertToDto(User user) {
-        UserDto dto = new UserDto();
+    private UserVo convertToDto(User user) {
+        UserVo dto = new UserVo();
         dto.setId(user.getId());
         dto.setUsername(user.getUsername());
         dto.setToken(getToken(user));

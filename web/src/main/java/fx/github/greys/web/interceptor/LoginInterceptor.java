@@ -3,8 +3,6 @@ package fx.github.greys.web.interceptor;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTDecodeException;
-import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.google.common.collect.Sets;
 import fx.github.greys.web.dto.GreysResponse;
 import fx.github.greys.web.entity.system.User;

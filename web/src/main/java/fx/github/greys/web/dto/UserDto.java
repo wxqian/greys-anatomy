@@ -8,11 +8,11 @@ import java.io.Serializable;
 @Data
 @ToString
 public class UserDto implements Serializable {
-    private static final long serialVersionUID = -7749825120066886561L;
-
-    private Long id;
+    private static final long serialVersionUID = -1467701679896113914L;
 
     private String username;
 
-    private String token;
+    private String password;
+
+    private String roles;
 }
