@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @Table(name = "t_user", uniqueConstraints = {@UniqueConstraint(columnNames = {"username"})})
@@ -31,5 +32,9 @@ public class User implements Serializable {
     //更新时间
     @Column(name = "modify_time")
     private long modifyTime = System.currentTimeMillis();
+
+    @ManyToMany
+    @JoinTable(name = "t_user_role",joinColumns = @JoinColumn(name="user_id",referencedColumnName = "id"))
+    private List<Role> roles;
 
 }

@@ -41,11 +41,11 @@ public class Permission implements Serializable {
     private Long parent;
 
     //0 已删除 1 使用中
-    @Column
+    @Column(columnDefinition = "int default 1")
     private int status;
 
     //排序
-    @Column
+    @Column(columnDefinition = "int default 0")
     private int sorts;
 
     //创建时间

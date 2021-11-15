@@ -46,14 +46,18 @@ public class UserService {
      * @return
      */
     @Transactional
-    public GreysResponse<String> addUser(@RequestBody UserDto dto) {
+    public GreysResponse<String> modifyUser(@RequestBody UserDto dto) {
         GreysResponse<String> result = GreysResponse.createSuccess();
         try {
             User user = new User();
+            if (dto.getId() != null) {
+                user = userRepository.findById(dto.getId()).orElse(user);
+                userRoleRepository.deleteByUserId(dto.getId());
+            } else {
+                user.setPassword(dto.getPassword());
+            }
             user.setUsername(dto.getUsername());
-            user.setPassword(dto.getPassword());
-            final User _user = userRepository.save(user);
-
+            final User _user = userRepository.saveAndFlush(user);
             String roles = dto.getRoles();
             if (!StringUtils.isBlank(roles)) {
                 List<UserRole> userRoles = Splitter.
@@ -67,9 +71,8 @@ public class UserService {
                             return userRole;
                         }).collect(Collectors.toList());
 
-                userRoleRepository.saveAll(userRoles);
+                userRoleRepository.saveAllAndFlush(userRoles);
             }
-
         } catch (Exception e) {
             result = GreysResponse.createError("add user occurs error");
             log.error("add user occurs exception.", e);
