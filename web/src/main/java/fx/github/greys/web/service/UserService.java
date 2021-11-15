@@ -2,21 +2,28 @@ package fx.github.greys.web.service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.google.common.base.Splitter;
 import fx.github.greys.web.dto.GreysResponse;
 import fx.github.greys.web.dto.UserDto;
-import fx.github.greys.web.vo.UserVo;
 import fx.github.greys.web.entity.system.User;
+import fx.github.greys.web.entity.system.UserRole;
 import fx.github.greys.web.repository.UserRepository;
+import fx.github.greys.web.repository.UserRoleRepository;
+import fx.github.greys.web.vo.UserVo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import static fx.github.greys.web.constant.Constants.COMMA;
 import static fx.github.greys.web.constant.Constants.TOKEN_EXPIRE_TIME;
 
 /**
@@ -29,19 +36,40 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private UserRoleRepository userRoleRepository;
+
     /**
      * 用户添加
      *
      * @param dto
      * @return
      */
+    @Transactional
     public GreysResponse<String> addUser(@RequestBody UserDto dto) {
         GreysResponse<String> result = GreysResponse.createSuccess();
         try {
             User user = new User();
             user.setUsername(dto.getUsername());
             user.setPassword(dto.getPassword());
-            userRepository.save(user);
+            final User _user = userRepository.save(user);
+
+            String roles = dto.getRoles();
+            if (!StringUtils.isBlank(roles)) {
+                List<UserRole> userRoles = Splitter.
+                        on(COMMA).omitEmptyStrings().trimResults()
+                        .splitToList(roles)
+                        .stream()
+                        .map(Long::parseLong).map(roleId -> {
+                            UserRole userRole = new UserRole();
+                            userRole.setRoleId(roleId);
+                            userRole.setUserId(_user.getId());
+                            return userRole;
+                        }).collect(Collectors.toList());
+
+                userRoleRepository.saveAll(userRoles);
+            }
+
         } catch (Exception e) {
             result = GreysResponse.createError("add user occurs error");
             log.error("add user occurs exception.", e);

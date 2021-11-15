@@ -13,4 +13,6 @@ public class RoleDto implements Serializable {
     private String name;
 
     private String desc;
+
+    private String permissions;
 }

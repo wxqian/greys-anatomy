@@ -11,14 +11,17 @@ import java.io.Serializable;
 public class Role implements Serializable {
 
     private static final long serialVersionUID = 6017975227701397932L;
+    //id
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Long id;
 
+    //角色名称
     @Column(name = "name", length = 50)
     private String name;
 
+    //描述
     @Column(name = "desc")
     private String desc;
 
@@ -26,9 +29,11 @@ public class Role implements Serializable {
     @Column(name = "status", columnDefinition = "int default 1")
     private int status = 1;
 
-    @Column
+    //创建时间
+    @Column(name = "create_time")
     private long createTime = System.currentTimeMillis();
 
-    @Column
+    //更新时间
+    @Column(name = "modify_time")
     private long modifyTime = System.currentTimeMillis();
 }

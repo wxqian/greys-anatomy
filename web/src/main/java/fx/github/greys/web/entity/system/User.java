@@ -16,15 +16,19 @@ public class User implements Serializable {
     @Column(name = "id")
     private Long id;
 
+    //用户名
     @Column(name = "username", length = 100)
     private String username;
 
+    //密码
     @Column(name = "password", length = 100)
     private String password;
 
+    //创建时间
     @Column(name = "create_time")
     private long createTime = System.currentTimeMillis();
 
+    //更新时间
     @Column(name = "modify_time")
     private long modifyTime = System.currentTimeMillis();
 
