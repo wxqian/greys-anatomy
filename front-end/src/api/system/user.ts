@@ -4,8 +4,8 @@ import { LoginParams, LoginResultModel } from './model/userModel'
 import { ContentTypeEnum } from '@/enums/httpEnum'
 
 enum Api {
-  login = '/admin/login',
-  logout = '/login/logout'
+  login = '/system/login',
+  logout = '/system/logout'
 }
 
 /**

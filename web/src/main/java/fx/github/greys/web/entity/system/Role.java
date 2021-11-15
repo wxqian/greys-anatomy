@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @Entity
@@ -36,4 +37,8 @@ public class Role implements Serializable {
     //更新时间
     @Column(name = "modify_time")
     private long modifyTime = System.currentTimeMillis();
+
+    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JoinTable(name = "t_user_role",joinColumns = @JoinColumn(name="role_id",referencedColumnName = "id"))
+    private List<User> user;
 }
