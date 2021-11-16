@@ -1,5 +1,6 @@
 package fx.github.greys.web.entity.system;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -38,7 +39,16 @@ public class Role implements Serializable {
     @Column(name = "modify_time")
     private long modifyTime = System.currentTimeMillis();
 
-    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    @JoinTable(name = "t_user_role",joinColumns = @JoinColumn(name="role_id",referencedColumnName = "id"))
-    private List<User> user;
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY,mappedBy = "roles")
+    @JsonIgnoreProperties({"users"})
+    private List<User> users;
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "t_role_permission",
+            joinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "permission_id", referencedColumnName = "id")}
+    )
+    @JsonIgnoreProperties({"permissions"})
+    private List<Permission> permissions;
 }

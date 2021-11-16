@@ -6,7 +6,7 @@ import {
 } from './model/menuModel'
 
 enum Api {
-  adminMenus = '/admin/menus',
+  adminMenus = '/system/menus',
   GetBtnCodeListByUserId = '/getBtnCodeListByUserId'
 }
 

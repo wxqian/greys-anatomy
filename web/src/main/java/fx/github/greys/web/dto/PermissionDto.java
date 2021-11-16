@@ -25,5 +25,7 @@ public class PermissionDto implements Serializable {
     //状态
     private int status = 1;
     //排序
-    private int sorts;
+    private int sorts = 0;
+
+    private String viewPath;
 }

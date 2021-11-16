@@ -1,10 +1,12 @@
 package fx.github.greys.web.entity.system;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @ToString
@@ -55,4 +57,12 @@ public class Permission implements Serializable {
     //更新时间
     @Column(name = "modify_time")
     private long modifyTime = System.currentTimeMillis();
+
+    @Column(name = "view_path")
+    private String viewPath;
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY,mappedBy = "permissions")
+    @JsonIgnoreProperties({"roles"})
+    private List<Role> roles;
+
 }

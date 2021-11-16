@@ -3,12 +3,18 @@ package fx.github.greys.web.service;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import fx.github.greys.web.dto.GreysResponse;
+import fx.github.greys.web.dto.SessionUser;
 import fx.github.greys.web.dto.UserDto;
+import fx.github.greys.web.entity.system.Permission;
+import fx.github.greys.web.entity.system.Role;
 import fx.github.greys.web.entity.system.User;
 import fx.github.greys.web.entity.system.UserRole;
 import fx.github.greys.web.repository.UserRepository;
 import fx.github.greys.web.repository.UserRoleRepository;
+import fx.github.greys.web.vo.MenuItemVo;
 import fx.github.greys.web.vo.UserVo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -18,13 +24,18 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-import static fx.github.greys.web.constant.Constants.COMMA;
-import static fx.github.greys.web.constant.Constants.TOKEN_EXPIRE_TIME;
+import static fx.github.greys.web.constant.Constants.*;
 
 /**
  * 用户操作类
@@ -52,6 +63,7 @@ public class UserService {
             User user = new User();
             if (dto.getId() != null) {
                 user = userRepository.findById(dto.getId()).orElse(user);
+                user.setModifyTime(System.currentTimeMillis());
                 userRoleRepository.deleteByUserId(dto.getId());
             } else {
                 user.setPassword(dto.getPassword());
@@ -116,8 +128,32 @@ public class UserService {
             return result;
         }
         UserVo dto = convertToDto(user);
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
+                .getRequestAttributes()).getRequest();
+        HttpSession session = request.getSession();
+        SessionUser sessionUser = convertToSessionUser(user);
+        session.setAttribute(SESSION_USER, sessionUser);
         result = GreysResponse.createSuccess(dto, "success");
         return result;
+    }
+
+    private SessionUser convertToSessionUser(User user) {
+        SessionUser sessionUser = new SessionUser();
+        sessionUser.setId(user.getId());
+        sessionUser.setUsername(user.getUsername());
+        return sessionUser;
+    }
+
+    private MenuItemVo convertToMenuItem(Permission p) {
+        return MenuItemVo.builder()
+                .icon(p.getIcon())
+                .id(p.getId())
+                .name(p.getName())
+                .parentId(p.getParent())
+                .sort(p.getSorts())
+                .url(p.getUrl())
+                .viewPath(p.getViewPath())
+                .build();
     }
 
     private UserVo convertToDto(User user) {
@@ -163,5 +199,30 @@ public class UserService {
             log.error("delete user occurs exception.userId:{}", userId, e);
         }
         return result;
+    }
+
+    public GreysResponse<List<MenuItemVo>> getUserMenuItems() {
+        GreysResponse<List<MenuItemVo>> result = GreysResponse.createSuccess();
+        try {
+            HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
+                    .getRequestAttributes()).getRequest();
+            HttpSession session = request.getSession();
+            SessionUser sessionUser = (SessionUser) session.getAttribute(SESSION_USER);
+            if (sessionUser == null) {
+                result = GreysResponse.createTimeout();
+                return result;
+            }
+            User user = userRepository.getById(sessionUser.getId());
+            List<Role> roles = user.getRoles();
+            Set<MenuItemVo> menuItemVos = Sets.newHashSet();
+            menuItemVos.addAll(roles.stream().map(Role::getPermissions).flatMap(Collection::stream).map(this::convertToMenuItem).collect(Collectors.toSet()));
+            List<MenuItemVo> menuItemVos1 = Lists.newArrayList(menuItemVos);
+            result.setResult(menuItemVos1);
+        } catch (Exception e) {
+            result = GreysResponse.createError("get user menu items error.");
+            log.error("get user menu items error", e);
+        }
+        return result;
+
     }
 }

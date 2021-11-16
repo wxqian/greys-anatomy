@@ -9,35 +9,35 @@ import lombok.ToString;
 @ToString
 public class GreysResponse<T> {
 
-    private String code;
+    private int code;
 
     private T result;
 
     private String message;
 
-    public GreysResponse(String code, T result) {
+    public GreysResponse(int code, T result) {
         this.code = code;
         this.result = result;
     }
 
-    public GreysResponse(String code, T result, String message) {
+    public GreysResponse(int code, T result, String message) {
         this.code = code;
         this.result = result;
         this.message = message;
     }
 
-    public GreysResponse(String code, String message) {
+    public GreysResponse(int code, String message) {
         this.code = code;
         this.message = message;
     }
 
-    public GreysResponse(String code) {
+    public GreysResponse(int code) {
         this.code = code;
     }
 
-    private static final String SUCCESS = "0";
-    private static final String FAIL = "1";
-    private static final String TIMEOUT = "10042";
+    private static final int SUCCESS = 0;
+    private static final int FAIL = 1;
+    private static final int TIMEOUT = 10042;
 
 
     public static <T> GreysResponse<T> createSuccess(String message) {

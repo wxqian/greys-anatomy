@@ -4,17 +4,20 @@ import lombok.Data;
 import lombok.ToString;
 
 import java.io.Serializable;
-import java.util.List;
 
 @Data
 @ToString
-public class RoleVo implements Serializable {
-    private static final long serialVersionUID = 3629709775180088587L;
+public class PermissionVo implements Serializable {
+    private static final long serialVersionUID = -7846184943023735534L;
+
     private Long id;
     private String name;
     private String desc;
+    private String url;
+    private String icon;
+    private Long parentId;
     private int status;
+    private int sorts;
     private long createTime;
     private long modifyTime;
-    private List<PermissionVo> permissionVos;
 }
