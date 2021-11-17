@@ -209,17 +209,18 @@ export default defineComponent({
         Object.prototype.toString.call(props.getListFunc).includes('Function')
       ) {
         const queryParams = {
-          pageNumber: flush ? 1 : pageOptions.value.current,
+          pageNum: flush ? 1 : pageOptions.value.current,
           pageSize: pageOptions.value.pageSize,
           ...props.pageOption,
           ...params
         }
         state.loading = true
-        const { data, pageNumber, pageSize, total } = await props
+        const { data, pageNum, pageSize, total } = await props
           ?.getListFunc?.(queryParams)
           .finally(() => (state.loading = false))
+        debugger
         Object.assign(pageOptions.value, {
-          current: ~~pageNumber,
+          current: ~~pageNum,
           pageSize: ~~pageSize,
           total: ~~total
         })
@@ -283,7 +284,7 @@ export default defineComponent({
       }
       refreshTableData({
         pageSize: pagination.pageSize,
-        pageNumber: pagination.current,
+        pageNum: pagination.current,
         ...props.pageOption,
         ...filters,
         field,

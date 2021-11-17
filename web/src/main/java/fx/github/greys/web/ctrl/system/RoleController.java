@@ -42,7 +42,7 @@ public class RoleController {
     @ApiOperation(value = "角色列表", notes = "角色列表")
     public GreysResponse<Page<RoleVo>> listRoles(@ApiParam("每页条数") @RequestParam(name = "pageSize", required = false, defaultValue = "10") int pageSize,
                                                  @ApiParam("页数") @RequestParam(name = "pageNum", required = false, defaultValue = "1") int pageNum) {
-        Pageable pageable = PageRequest.of(pageNum, pageSize);
+        Pageable pageable = PageRequest.of(pageNum-1, pageSize);
         return roleService.listRoles(pageable);
     }
 

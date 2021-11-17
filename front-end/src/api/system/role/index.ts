@@ -2,8 +2,8 @@ import http from '@/utils/http/axios'
 import { RequestEnum } from '@/enums/httpEnum'
 
 enum Api {
-  adminRole = '/admin/role',
-  adminRoleAccess = '/admin/role_access'
+  adminRole = '/system/listRoles',
+  adminRoleAccess = '/system/role_access'
 }
 
 /**

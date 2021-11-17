@@ -4,7 +4,7 @@ export interface BasicResponseModel<T = any> {
   result: T
 }
 export interface BasicPageParams {
-  pageNumber: number
+  pageNum: number
   pageSize: number
   total: number
 }
