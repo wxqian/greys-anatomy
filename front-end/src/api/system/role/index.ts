@@ -3,7 +3,7 @@ import { RequestEnum } from '@/enums/httpEnum'
 
 enum Api {
   adminRole = '/system/listRoles',
-  adminRoleAccess = '/system/role_access'
+  adminRoleAccess = '/system/rolePermissions'
 }
 
 /**

@@ -21,7 +21,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static fx.github.greys.web.constant.Constants.COMMA;
@@ -55,8 +57,8 @@ public class RoleService {
                 role.setModifyTime(System.currentTimeMillis());
                 rolePermissionRepository.deleteByRoleId(dto.getId());
             }
-            role.setName(dto.getName());
-            role.setDesc(dto.getDesc());
+            role.setName(StringUtils.isNotBlank(dto.getName()) ? dto.getName() : role.getName());
+            role.setDesc(StringUtils.isNotBlank(dto.getDesc()) ? dto.getDesc() : role.getDesc());
             final Role _role = roleRepository.saveAndFlush(role);
             String permissions = dto.getPermissions();
             if (StringUtils.isNotBlank(permissions)) {
@@ -102,7 +104,7 @@ public class RoleService {
             roleVo.setStatus(r.getStatus());
             roleVo.setCreateTime(r.getCreateTime());
             roleVo.setModifyTime(r.getModifyTime());
-            roleVo.setPermissionVos(r.getPermissions().stream().map(this::convertPermissionVo).collect(Collectors.toList()));
+//            roleVo.setPermissionVos(r.getPermissions().stream().map(this::convertPermissionVo).collect(Collectors.toList()));
             return roleVo;
         }).collect(Collectors.toList());
         Page<RoleVo> roleVoPage = new PageImpl<>(roleVos, roles.getPageable(), roles.getTotalElements());
@@ -165,5 +167,23 @@ public class RoleService {
         permissionVo.setCreateTime(r.getCreateTime());
         permissionVo.setModifyTime(r.getModifyTime());
         return permissionVo;
+    }
+
+    public GreysResponse<List<PermissionVo>> rolePermissions(Long roleId) {
+        GreysResponse<List<PermissionVo>> result = GreysResponse.createSuccess();
+        try {
+            List<Permission> permissions;
+            if (roleId == null) {
+                permissions = permissionRepository.findAll();
+            } else {
+                Role role = roleRepository.getById(roleId);
+                permissions = role.getId() == null ? new ArrayList<>() : role.getPermissions();
+            }
+            result.setResult(permissions.stream().map(this::convertPermissionVo).collect(Collectors.toList()));
+        } catch (Exception e) {
+            result = GreysResponse.createError("role permissions occurs error");
+            log.error("role permissions occurs exception.", e);
+        }
+        return result;
     }
 }

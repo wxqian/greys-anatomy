@@ -19,7 +19,7 @@ export const getFormSchema = (): FormSchema => ({
     {
       type: 'input',
       label: '角色名称',
-      field: 'title',
+      field: 'name',
       value: '',
       props: {
         placeholder: '请输入角色名称'
@@ -34,7 +34,7 @@ export const getFormSchema = (): FormSchema => ({
     {
       type: 'textarea',
       label: '描述',
-      field: 'description',
+      field: 'desc',
       value: '',
       props: {
         placeholder: '角色描述'
@@ -42,15 +42,15 @@ export const getFormSchema = (): FormSchema => ({
     },
     {
       type: createVNode(AccessTree),
-      label: '资源',
-      field: 'accessIdsList',
+      label: '权限',
+      field: 'permissions',
       value: [],
       asyncValue: async (currentValue, formInstance) => {
         const { id } = formInstance?.props.fields as any
         // 获取角色列表
         const data = await getAdminRoleAccess(id)
         // 设置角色复选框选项
-        return data.map((item) => item.accessId)
+        return data.map((item) => item.id)
       }
     }
   ]

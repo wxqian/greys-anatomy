@@ -40,10 +40,10 @@ export default defineComponent({
     // 列表转树
     const list2tree = (items, parent = -1) => {
       return items
-        .filter((item) => item.moduleId == parent)
+        .filter((item) => item.parentId == parent)
         .map((item) => ({
           ...item,
-          title: item.moduleName || item.actionName,
+          title: item.name,
           children: list2tree(items, item.id)
         }))
     }
