@@ -8,26 +8,26 @@ export const columns: TableColumn[] = [
   // 角色列表
   {
     title: '角色名称',
-    dataIndex: 'title'
+    dataIndex: 'name'
   },
   {
     title: '描述',
-    dataIndex: 'description'
+    dataIndex: 'desc'
   },
   {
     title: '创建时间',
-    dataIndex: 'createdAt',
+    dataIndex: 'createTime',
     slots: {
-      customRender: 'createdAt'
+      customRender: 'createTime'
     },
     slotsType: 'format',
     slotsFunc: (val) => formatDate(val)
   },
   {
     title: '最后更新时间',
-    dataIndex: 'updatedAt',
+    dataIndex: 'modifyTime',
     slots: {
-      customRender: 'updatedAt'
+      customRender: 'modiftyTime'
     },
     slotsType: 'format',
     slotsFunc: (val) => formatDate(val)

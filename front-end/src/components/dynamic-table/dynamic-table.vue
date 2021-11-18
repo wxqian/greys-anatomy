@@ -215,12 +215,14 @@ export default defineComponent({
           ...params
         }
         state.loading = true
-        const { data, pageNum, pageSize, total } = await props
-          ?.getListFunc?.(queryParams)
-          .finally(() => (state.loading = false))
-        debugger
+        const {
+          content: data,
+          number: pageNum,
+          size: pageSize,
+          totalElements: total
+        } = await props?.getListFunc?.(queryParams).finally(() => (state.loading = false))
         Object.assign(pageOptions.value, {
-          current: ~~pageNum,
+          current: ~~(pageNum + 1),
           pageSize: ~~pageSize,
           total: ~~total
         })
