@@ -2,73 +2,53 @@
   <a-modal
     v-model:visible="visible"
     :width="600"
-    :title="Number.isInteger(fields.id) ? '编辑资源' : '新增资源'"
+    :title="Number.isInteger(fields.id) ? '编辑权限' : '新增权限'"
     :confirm-loading="confirmLoading"
     :afterClose="remove"
     @ok="handleOk"
   >
     <a-form ref="formRef" :model="modelRef" :label-col="labelCol" :wrapper-col="wrapperCol">
-      <a-form-item label="类别" :rules="rules.type" name="type">
-        <a-select
-          v-model:value="modelRef.type"
-          :disabled="Number.isInteger(fields.id)"
-          placeholder="请选择类型"
-        >
-          <a-select-option :value="1"> 模块 </a-select-option>
-          <a-select-option :value="2"> 菜单 </a-select-option>
-        </a-select>
-      </a-form-item>
-      <a-form-item
-        v-if="modelRef.type == 1"
-        label="模块名称"
-        :rules="rules.moduleName"
-        name="moduleName"
-      >
+      <a-form-item label="权限名称" :rules="rules.name" name="name">
         <a-input
-          v-model:value="modelRef.moduleName"
+          v-model:value="modelRef.name"
           :disabled="Number.isInteger(fields.id)"
-          placeholder="请输入模块名称"
+          placeholder="请输入权限名称"
         />
       </a-form-item>
-      <a-form-item
-        v-if="modelRef.type == 2"
-        label="模块名称"
-        :rules="rules.moduleId"
-        name="moduleId"
-      >
+      <a-form-item label="权限描述" name="desc">
+        <a-input v-model:value="modelRef.desc" placeholder="请输入权限描述" />
+      </a-form-item>
+      <a-form-item label="父权限" name="parentId">
+        <a-tree-select
+          v-model:value="modelRef.parentId"
+          tree-data-simple-mode
+          style="width: 100%"
+          :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
+          :tree-data="treeData"
+          placeholder="请选择父权限"
+          :load-data="loadParentPermissions"
+        />
         <a-select
-          v-model:value="modelRef.moduleId"
+          v-model:value="modelRef.parentId"
           :disabled="Number.isInteger(fields.id)"
-          placeholder="请选择模块"
+          placeholder="请选择父权限"
         >
           <a-select-option v-for="item in moduleList" :key="item.id" :value="item.id">
-            {{ item.moduleName }}
+            {{ item.name }}
           </a-select-option>
         </a-select>
-      </a-form-item>
-      <a-form-item
-        v-if="modelRef.type == 2"
-        label="菜单名称"
-        :rules="rules.actionName"
-        name="actionName"
-      >
-        <a-input v-model:value="modelRef.actionName" placeholder="请输入菜单名称" />
       </a-form-item>
       <a-form-item
         label="文件路径"
         name="viewPath"
         :rules="[
           {
-            required: modelRef.type == 2,
+            required: true,
             message: '请输入页面对应的文件路径'
           }
         ]"
       >
-        <a-select
-          v-model:value="modelRef.viewPath"
-          :allowClear="modelRef.type == 1"
-          placeholder="请选择页面对应的文件路径"
-        >
+        <a-select v-model:value="modelRef.viewPath" placeholder="请选择页面对应的文件路径">
           <template v-for="(comp, path) in constantRouterComponents" :key="path">
             <a-select-option :value="path"> {{ path }} </a-select-option>
           </template>
@@ -82,13 +62,7 @@
         <a :href="`${prefix}#/icons`" target="_blank">可选图标</a>
       </a-form-item>
       <a-form-item label="排序">
-        <a-input-number v-model:value="modelRef.sort" :min="1" placeholder="排序" />
-      </a-form-item>
-      <a-form-item label="keepAlive" name="keepAlive">
-        <a-select v-model:value="modelRef.keepAlive" placeholder="是否缓存页面">
-          <a-select-option :value="0"> 否 </a-select-option>
-          <a-select-option :value="1"> 是 </a-select-option>
-        </a-select>
+        <a-input-number v-model:value="modelRef.sorts" :min="1" placeholder="排序" />
       </a-form-item>
     </a-form>
   </a-modal>
@@ -141,46 +115,21 @@ export default defineComponent({
       moduleList: []
     })
     const modelRef = reactive({
-      moduleName: '',
-      moduleId: undefined,
-      actionName: '',
+      id: undefined,
+      name: '',
+      desc: '',
       viewPath: '',
-      type: undefined as undefined | number,
+      parentId: -1,
       url: '',
       icon: '',
-      sort: 1,
-      keepAlive: 1
+      sorts: 1
     })
 
-    // 如果有moduleId,则为编辑操作
-    if (props.fields.moduleId) {
-      Object.keys(modelRef).forEach((key) => (modelRef[key] = props.fields[key]))
-      modelRef.type = props.fields.moduleId == -1 ? 1 : 2
-    }
-
     const rules = {
-      moduleName: [
+      name: [
         {
           required: true,
-          message: '模块名称不能为空'
-        }
-      ],
-      moduleId: [
-        {
-          required: true,
-          message: '模块名称不能为空'
-        }
-      ],
-      actionName: [
-        {
-          required: true,
-          message: '请输入菜单名称'
-        }
-      ],
-      type: [
-        {
-          required: true,
-          message: '请选择类型'
+          message: '权限名称不能为空'
         }
       ],
       url: [
@@ -193,7 +142,7 @@ export default defineComponent({
 
     onMounted(async () => {
       // 获取模块列表
-      state.moduleList = await getAdminAccessModule()
+      state.moduleList = await getAdminAccessModule(-1)
     })
 
     const handleOk = async (e) => {
@@ -215,6 +164,8 @@ export default defineComponent({
         state.confirmLoading = false
       }
     }
+
+    constant 
 
     return {
       ...toRefs(state),

@@ -10,9 +10,9 @@ export const columns: TableColumn[] = [
   // 资源管理
   {
     title: '名称',
-    dataIndex: 'moduleName',
+    dataIndex: 'name',
     slots: {
-      customRender: 'moduleName'
+      customRender: 'name'
     }
   },
   {
@@ -30,22 +30,22 @@ export const columns: TableColumn[] = [
   },
   {
     title: '排序',
-    dataIndex: 'sort'
+    dataIndex: 'sorts'
   },
   {
     title: '创建时间',
-    dataIndex: 'createdAt',
+    dataIndex: 'createTime',
     slots: {
-      customRender: 'createdAt'
+      customRender: 'createTime'
     },
     slotsType: 'format',
     slotsFunc: (val) => formatDate(val) // 格式化时间
   },
   {
     title: '最后更新时间',
-    dataIndex: 'updatedAt',
+    dataIndex: 'modifyTime',
     slots: {
-      customRender: 'updatedAt'
+      customRender: 'modifyTime'
     },
     slotsType: 'format',
     slotsFunc: (val) => formatDate(val) // 格式化时间

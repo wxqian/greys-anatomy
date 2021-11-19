@@ -21,11 +21,11 @@ public class PermissionDto implements Serializable {
     //icon
     private String icon;
     //父权限id
-    private Long parentId;
+    private Long parentId = -1L;
     //状态
     private int status = 1;
     //排序
     private int sorts = 0;
-
+    //前端vue路径
     private String viewPath;
 }

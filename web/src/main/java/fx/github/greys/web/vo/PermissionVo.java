@@ -18,6 +18,8 @@ public class PermissionVo implements Serializable {
     private Long parentId;
     private int status;
     private int sorts;
+//    @JsonSerialize(using= StringSerializer.class)
     private long createTime;
+//    @JsonSerialize(using= StringSerializer.class)
     private long modifyTime;
 }

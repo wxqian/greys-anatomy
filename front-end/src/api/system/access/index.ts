@@ -1,21 +1,20 @@
 import http from '@/utils/http/axios'
-import { RequestEnum } from '@/enums/httpEnum'
+import { RequestEnum, ContentTypeEnum } from '@/enums/httpEnum'
 import { AccessItem, AccessResultModel, ModuleItem } from './AccessModel'
 
 enum Api {
-  adminAccess = '/admin/access',
-  adminAccessModule = '/admin/access/module'
+  adminAccess = '/system/permissions',
+  adminAccessModule = '/system/parentPermissions'
 }
 
 /**
  * 获取模块列表
  * @param params
  */
-export function getAdminAccessModule(params = {}) {
+export function getAdminAccessModule(id: number) {
   return http.request<ModuleItem[]>({
-    url: Api.adminAccessModule,
-    method: RequestEnum.GET,
-    params
+    url: [Api.adminAccessModule, id].join('/'),
+    method: RequestEnum.GET
   })
 }
 
@@ -57,6 +56,9 @@ export function patchAdminAccess(id, params) {
     {
       url: [Api.adminAccess, id].join('/'),
       method: RequestEnum.PATCH,
+      headers: {
+        'Content-Type': ContentTypeEnum.JSON
+      },
       params
     },
     {

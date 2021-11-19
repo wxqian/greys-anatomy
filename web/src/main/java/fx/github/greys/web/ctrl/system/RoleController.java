@@ -46,8 +46,8 @@ public class RoleController {
         return roleService.listRoles(pageable);
     }
 
-    @PostMapping("permission")
-    @ApiOperation(value = "添加角色", notes = "添加角色")
+    @PostMapping(value = "permissions", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    @ApiOperation(value = "添加权限", notes = "添加权限")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "name", value = "权限名"),
             @ApiImplicitParam(name = "desc", value = "描述"),
@@ -55,12 +55,12 @@ public class RoleController {
             @ApiImplicitParam(name = "icon", value = "icon"),
             @ApiImplicitParam(name = "parentId", value = "父权限id"),
             @ApiImplicitParam(name = "sorts", value = "排序")})
-    public GreysResponse<String> addPermission(@RequestBody PermissionDto permissionDto) {
+    public GreysResponse<String> addPermission(PermissionDto permissionDto) {
         return roleService.modifyPermission(permissionDto);
     }
 
-    @GetMapping("listPermissions")
-    @ApiOperation(value = "角色列表", notes = "角色列表")
+    @GetMapping("permissions")
+    @ApiOperation(value = "权限列表", notes = "权限列表")
     public GreysResponse<Page<PermissionVo>> listPermissions(@ApiParam("每页条数") @RequestParam(name = "pageSize", required = false, defaultValue = "10") int pageSize,
                                                              @ApiParam("页数") @RequestParam(name = "pageNum", required = false, defaultValue = "1") int pageNum) {
         Pageable pageable = PageRequest.of(pageNum, pageSize);
@@ -89,5 +89,32 @@ public class RoleController {
     @ApiOperation(value = "角色删除", notes = "角色删除")
     public GreysResponse<String> deleteRoles(@PathVariable(name = "roleIds") @ApiParam(name = "角色id") String roleIds) {
         return roleService.deleteRoles(roleIds);
+    }
+
+    @DeleteMapping("permissions/{ids}")
+    @ApiOperation(value = "角色删除", notes = "角色删除")
+    public GreysResponse<String> deletePermissions(@PathVariable(name = "ids") @ApiParam(name = "角色id") String ids) {
+        return roleService.deletePermissions(ids);
+    }
+
+    @PatchMapping(value = "permissions/{id}")
+    @ApiOperation(value = "权限修改", notes = "权限修改")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "name", value = "权限名"),
+            @ApiImplicitParam(name = "desc", value = "描述"),
+            @ApiImplicitParam(name = "url", value = "路由"),
+            @ApiImplicitParam(name = "icon", value = "icon"),
+            @ApiImplicitParam(name = "parentId", value = "父权限id"),
+            @ApiImplicitParam(name = "sorts", value = "排序")})
+    public GreysResponse<String> patchPermissions(@PathVariable("id") @ApiParam("权限id") Long permissionId,
+                                                  @RequestBody PermissionDto permissionDto) {
+        permissionDto.setId(permissionId);
+        return roleService.modifyPermission(permissionDto);
+    }
+
+    @GetMapping("parentPermissions/{parentId}")
+    @ApiOperation(value = "上级权限列表", notes = "上级权限列表")
+    public GreysResponse<List<PermissionVo>> parentPermissions(@PathVariable("parentId") @ApiParam("parentId") Long parentId) {
+        return roleService.parentPermissions(parentId);
     }
 }

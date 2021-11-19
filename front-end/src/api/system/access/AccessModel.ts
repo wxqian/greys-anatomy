@@ -2,17 +2,15 @@ import { BasicPageParams } from '@/api/BasicResponseModel'
 
 export interface AccessItem {
   id: number
-  isDel: number
-  createdAt: string
-  updatedAt: string
-  moduleName: string
-  actionName: string
+  status: number
+  createTime: number
+  modifyTime: number
+  name: string
   icon: string
   url: string
-  moduleId: number
-  sort: number
-  keepAlive: number
-  description: string | null
+  parentId: number
+  sorts: number
+  desc: string | null
   children?: boolean
 }
 
@@ -22,5 +20,5 @@ export interface AccessResultModel extends BasicPageParams {
 
 export interface ModuleItem {
   id: number
-  moduleName: string
+  name: string
 }

@@ -24,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static fx.github.greys.web.constant.Constants.COMMA;
@@ -129,7 +128,7 @@ public class RoleService {
             permission.setDesc(dto.getDesc());
             permission.setUrl(dto.getUrl());
             permission.setIcon(dto.getIcon());
-            permission.setParent(dto.getParentId());
+            permission.setParent(dto.getParentId() == null ? -1L : dto.getParentId());
             permission.setSorts(dto.getSorts());
             permission.setViewPath(dto.getViewPath());
             permissionRepository.saveAndFlush(permission);
@@ -207,6 +206,37 @@ public class RoleService {
         } catch (Exception e) {
             log.error("delete role:{} occurs exception.", roleIds, e);
             result = GreysResponse.createError("delete role error");
+        }
+        return result;
+    }
+
+    @Transactional
+    public GreysResponse<String> deletePermissions(String ids) {
+        GreysResponse<String> result = GreysResponse.createSuccess();
+        try {
+            List<Long> pIds = Splitter.on(COMMA)
+                    .omitEmptyStrings()
+                    .trimResults()
+                    .splitToList(ids)
+                    .stream().map(Long::parseLong).collect(Collectors.toList());
+            permissionRepository.deleteAllById(pIds);
+            rolePermissionRepository.deleteAllByPermissionIds(pIds);
+        } catch (Exception e) {
+            log.error("delete permission:{} occurs exception.", ids, e);
+            result = GreysResponse.createError("delete permission error");
+        }
+        return result;
+    }
+
+    public GreysResponse<List<PermissionVo>> parentPermissions(Long parentId) {
+        GreysResponse<List<PermissionVo>> result = GreysResponse.createSuccess();
+        try {
+            List<Permission> permissions;
+            permissions = permissionRepository.findByParentId(parentId);
+            result.setResult(permissions.stream().map(this::convertPermissionVo).collect(Collectors.toList()));
+        } catch (Exception e) {
+            result = GreysResponse.createError("role permissions occurs error");
+            log.error("role permissions occurs exception.", e);
         }
         return result;
     }
