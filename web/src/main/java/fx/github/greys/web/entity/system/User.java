@@ -34,7 +34,7 @@ public class User implements Serializable {
     @Column(name = "modify_time")
     private long modifyTime = System.currentTimeMillis();
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany
     @JoinTable(
             name = "t_user_role",
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},

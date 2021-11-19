@@ -74,11 +74,11 @@ export default defineComponent({
         title: '添加角色',
         formSchema: getFormSchema(),
         handleOk: async (modelRef, state) => {
-          const { description, title, accessIdsList } = modelRef
+          const { desc, name, permissions } = modelRef
           const params = {
-            description,
-            title,
-            accessIdsList: accessIdsList.toString()
+            desc,
+            name,
+            permissions: permissions.toString()
           }
           await postAdminRole(params)
           tableRef.value?.refreshTableData()

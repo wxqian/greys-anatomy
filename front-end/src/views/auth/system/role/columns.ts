@@ -71,12 +71,12 @@ export const columns: TableColumn[] = [
             fields: record,
             formSchema: getFormSchema(),
             handleOk: async (modelRef, state) => {
-              const { description, title, accessIdsList } = modelRef
+              const { desc, name, permissions } = modelRef
 
               const params = {
-                description,
-                title,
-                accessIdsList: accessIdsList.toString()
+                desc,
+                name,
+                permissions: permissions.toString()
               }
               return await patchAdminRole(record.id, params).then(() => refreshTableData())
             }

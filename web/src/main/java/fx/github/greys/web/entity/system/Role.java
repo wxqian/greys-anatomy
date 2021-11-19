@@ -39,11 +39,11 @@ public class Role implements Serializable {
     @Column(name = "modify_time")
     private long modifyTime = System.currentTimeMillis();
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY,mappedBy = "roles")
+    @ManyToMany(mappedBy = "roles")
     @JsonIgnoreProperties({"users"})
     private List<User> users;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany
     @JoinTable(
             name = "t_role_permission",
             joinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")},

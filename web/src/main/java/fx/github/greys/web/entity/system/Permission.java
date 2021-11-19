@@ -61,7 +61,7 @@ public class Permission implements Serializable {
     @Column(name = "view_path")
     private String viewPath;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY,mappedBy = "permissions")
+    @ManyToMany(mappedBy = "permissions")
     @JsonIgnoreProperties({"roles"})
     private List<Role> roles;
 

@@ -1,8 +1,8 @@
 import http from '@/utils/http/axios'
-import { RequestEnum } from '@/enums/httpEnum'
+import { RequestEnum, ContentTypeEnum } from '@/enums/httpEnum'
 
 enum Api {
-  adminRole = '/system/listRoles',
+  adminRole = '/system/roles',
   adminRoleAccess = '/system/rolePermissions'
 }
 
@@ -55,6 +55,9 @@ export function patchAdminRole(id, params) {
     {
       url: [Api.adminRole, id].join('/'),
       method: RequestEnum.PATCH,
+      headers: {
+        'Content-Type': ContentTypeEnum.JSON
+      },
       params
     },
     {

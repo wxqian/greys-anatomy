@@ -10,6 +10,7 @@ import fx.github.greys.web.entity.system.RolePermission;
 import fx.github.greys.web.repository.PermissionRepository;
 import fx.github.greys.web.repository.RolePermissionRepository;
 import fx.github.greys.web.repository.RoleRepository;
+import fx.github.greys.web.repository.UserRoleRepository;
 import fx.github.greys.web.vo.PermissionVo;
 import fx.github.greys.web.vo.RoleVo;
 import lombok.extern.slf4j.Slf4j;
@@ -40,6 +41,9 @@ public class RoleService {
 
     @Autowired
     private PermissionRepository permissionRepository;
+
+    @Autowired
+    private UserRoleRepository userRoleRepository;
 
     /**
      * 添加角色
@@ -102,6 +106,7 @@ public class RoleService {
             roleVo.setId(r.getId());
             roleVo.setDesc(r.getDesc());
             roleVo.setStatus(r.getStatus());
+            roleVo.setName(r.getName());
             roleVo.setCreateTime(r.getCreateTime());
             roleVo.setModifyTime(r.getModifyTime());
 //            roleVo.setPermissionVos(r.getPermissions().stream().map(this::convertPermissionVo).collect(Collectors.toList()));
@@ -183,6 +188,25 @@ public class RoleService {
         } catch (Exception e) {
             result = GreysResponse.createError("role permissions occurs error");
             log.error("role permissions occurs exception.", e);
+        }
+        return result;
+    }
+
+    @Transactional
+    public GreysResponse<String> deleteRoles(String roleIds) {
+        GreysResponse<String> result = GreysResponse.createSuccess();
+        try {
+            List<Long> ids = Splitter.on(COMMA)
+                    .omitEmptyStrings()
+                    .trimResults()
+                    .splitToList(roleIds)
+                    .stream().map(Long::parseLong).collect(Collectors.toList());
+            roleRepository.deleteAllById(ids);
+            userRoleRepository.deleteAllByRoleIds(ids);
+            rolePermissionRepository.deleteAllByRoleIds(ids);
+        } catch (Exception e) {
+            log.error("delete role:{} occurs exception.", roleIds, e);
+            result = GreysResponse.createError("delete role error");
         }
         return result;
     }
