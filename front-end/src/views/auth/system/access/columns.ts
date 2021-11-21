@@ -10,10 +10,7 @@ export const columns: TableColumn[] = [
   // 资源管理
   {
     title: '名称',
-    dataIndex: 'name',
-    slots: {
-      customRender: 'name'
-    }
+    dataIndex: 'name'
   },
   {
     title: 'url地址',
