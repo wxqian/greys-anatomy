@@ -20,5 +20,7 @@ export interface AccessResultModel extends BasicPageParams {
 
 export interface ModuleItem {
   id: number
-  name: string
+  value: string
+  pId: string
+  title: string
 }

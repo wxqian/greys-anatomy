@@ -14,7 +14,8 @@ import {
   Col,
   Row,
   Select,
-  DatePicker
+  DatePicker,
+  TreeSelect
 } from 'ant-design-vue'
 
 import 'ant-design-vue/dist/antd.css'
@@ -35,4 +36,5 @@ export function setupAntd(app: App<Element>) {
     .use(Row)
     .use(Select)
     .use(DatePicker)
+    .use(TreeSelect)
 }

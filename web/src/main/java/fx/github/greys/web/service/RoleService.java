@@ -13,6 +13,7 @@ import fx.github.greys.web.repository.RoleRepository;
 import fx.github.greys.web.repository.UserRoleRepository;
 import fx.github.greys.web.vo.PermissionVo;
 import fx.github.greys.web.vo.RoleVo;
+import fx.github.greys.web.vo.TreePermissionVo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -228,16 +229,29 @@ public class RoleService {
         return result;
     }
 
-    public GreysResponse<List<PermissionVo>> parentPermissions(Long parentId) {
-        GreysResponse<List<PermissionVo>> result = GreysResponse.createSuccess();
+    public GreysResponse<List<TreePermissionVo>> treePermissions() {
+        GreysResponse<List<TreePermissionVo>> result = GreysResponse.createSuccess();
         try {
             List<Permission> permissions;
-            permissions = permissionRepository.findByParentId(parentId);
-            result.setResult(permissions.stream().map(this::convertPermissionVo).collect(Collectors.toList()));
+            permissions = permissionRepository.findAll();
+            result.setResult(permissions.stream().map(this::convertTreePermissionVo).collect(Collectors.toList()));
         } catch (Exception e) {
             result = GreysResponse.createError("role permissions occurs error");
             log.error("role permissions occurs exception.", e);
         }
         return result;
+    }
+
+    private TreePermissionVo convertTreePermissionVo(Permission permission) {
+        TreePermissionVo permissionVo = new TreePermissionVo();
+        if (permission.getParent() != null && permission.getParent() > 0) {
+            permissionVo.setPId(permission.getParent() + "");
+        }else{
+            permissionVo.setPId("");
+        }
+        permissionVo.setValue(permission.getId() + "");
+        permissionVo.setId(permission.getId());
+        permissionVo.setTitle(permission.getName());
+        return permissionVo;
     }
 }

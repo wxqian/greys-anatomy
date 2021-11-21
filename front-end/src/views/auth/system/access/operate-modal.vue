@@ -24,19 +24,9 @@
           tree-data-simple-mode
           style="width: 100%"
           :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
-          :tree-data="treeData"
+          :tree-data="moduleList"
           placeholder="请选择父权限"
-          :load-data="loadParentPermissions"
         />
-        <a-select
-          v-model:value="modelRef.parentId"
-          :disabled="Number.isInteger(fields.id)"
-          placeholder="请选择父权限"
-        >
-          <a-select-option v-for="item in moduleList" :key="item.id" :value="item.id">
-            {{ item.name }}
-          </a-select-option>
-        </a-select>
       </a-form-item>
       <a-form-item
         label="文件路径"
@@ -70,7 +60,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, toRefs, onMounted, ref } from 'vue'
-import { Modal, Form, InputNumber, Input, Select } from 'ant-design-vue'
+import { Modal, Form, InputNumber, Input, Select, TreeSelect } from 'ant-design-vue'
 import { constantRouterComponents } from '@/router/modules'
 import { ModuleItem } from '@/api/system/access/AccessModel'
 import { postAdminAccess, getAdminAccessModule, patchAdminAccess } from '@/api/system/access'
@@ -91,7 +81,8 @@ export default defineComponent({
     [InputNumber.name]: InputNumber,
     [Input.name]: Input,
     [Select.name]: Select,
-    ASelectOption: Select.Option
+    ASelectOption: Select.Option,
+    [TreeSelect.name]: TreeSelect
   },
   props: {
     remove: {
@@ -119,7 +110,7 @@ export default defineComponent({
       name: '',
       desc: '',
       viewPath: '',
-      parentId: -1,
+      parentId: undefined,
       url: '',
       icon: '',
       sorts: 1
@@ -142,7 +133,7 @@ export default defineComponent({
 
     onMounted(async () => {
       // 获取模块列表
-      state.moduleList = await getAdminAccessModule(-1)
+      state.moduleList = await getAdminAccessModule()
     })
 
     const handleOk = async (e) => {
@@ -164,8 +155,6 @@ export default defineComponent({
         state.confirmLoading = false
       }
     }
-
-    constant 
 
     return {
       ...toRefs(state),

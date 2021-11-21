@@ -6,6 +6,7 @@ import fx.github.greys.web.dto.RoleDto;
 import fx.github.greys.web.service.RoleService;
 import fx.github.greys.web.vo.PermissionVo;
 import fx.github.greys.web.vo.RoleVo;
+import fx.github.greys.web.vo.TreePermissionVo;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +64,7 @@ public class RoleController {
     @ApiOperation(value = "权限列表", notes = "权限列表")
     public GreysResponse<Page<PermissionVo>> listPermissions(@ApiParam("每页条数") @RequestParam(name = "pageSize", required = false, defaultValue = "10") int pageSize,
                                                              @ApiParam("页数") @RequestParam(name = "pageNum", required = false, defaultValue = "1") int pageNum) {
-        Pageable pageable = PageRequest.of(pageNum, pageSize);
+        Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
         return roleService.listPermissions(pageable);
     }
 
@@ -112,9 +113,9 @@ public class RoleController {
         return roleService.modifyPermission(permissionDto);
     }
 
-    @GetMapping("parentPermissions/{parentId}")
+    @GetMapping("treePermissions")
     @ApiOperation(value = "上级权限列表", notes = "上级权限列表")
-    public GreysResponse<List<PermissionVo>> parentPermissions(@PathVariable("parentId") @ApiParam("parentId") Long parentId) {
-        return roleService.parentPermissions(parentId);
+    public GreysResponse<List<TreePermissionVo>> treePermissions() {
+        return roleService.treePermissions();
     }
 }

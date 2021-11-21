@@ -4,16 +4,16 @@ import { AccessItem, AccessResultModel, ModuleItem } from './AccessModel'
 
 enum Api {
   adminAccess = '/system/permissions',
-  adminAccessModule = '/system/parentPermissions'
+  adminAccessModule = '/system/treePermissions'
 }
 
 /**
  * 获取模块列表
  * @param params
  */
-export function getAdminAccessModule(id: number) {
+export function getAdminAccessModule() {
   return http.request<ModuleItem[]>({
-    url: [Api.adminAccessModule, id].join('/'),
+    url: Api.adminAccessModule,
     method: RequestEnum.GET
   })
 }
