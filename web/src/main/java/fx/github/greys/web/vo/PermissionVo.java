@@ -22,4 +22,5 @@ public class PermissionVo implements Serializable {
     private long createTime;
 //    @JsonSerialize(using= StringSerializer.class)
     private long modifyTime;
+    private String viewPath;
 }

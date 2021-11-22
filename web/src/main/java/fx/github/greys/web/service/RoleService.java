@@ -171,6 +171,7 @@ public class RoleService {
         permissionVo.setSorts(r.getSorts());
         permissionVo.setCreateTime(r.getCreateTime());
         permissionVo.setModifyTime(r.getModifyTime());
+        permissionVo.setViewPath(r.getViewPath());
         return permissionVo;
     }
 
@@ -220,8 +221,8 @@ public class RoleService {
                     .trimResults()
                     .splitToList(ids)
                     .stream().map(Long::parseLong).collect(Collectors.toList());
-            permissionRepository.deleteAllById(pIds);
             rolePermissionRepository.deleteAllByPermissionIds(pIds);
+            permissionRepository.deleteAllById(pIds);
         } catch (Exception e) {
             log.error("delete permission:{} occurs exception.", ids, e);
             result = GreysResponse.createError("delete permission error");
@@ -246,7 +247,7 @@ public class RoleService {
         TreePermissionVo permissionVo = new TreePermissionVo();
         if (permission.getParent() != null && permission.getParent() > 0) {
             permissionVo.setPId(permission.getParent() + "");
-        }else{
+        } else {
             permissionVo.setPId("");
         }
         permissionVo.setValue(permission.getId() + "");

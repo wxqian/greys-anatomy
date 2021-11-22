@@ -33,7 +33,7 @@
         name="viewPath"
         :rules="[
           {
-            required: true,
+            required: modelRef.parentId != undefined,
             message: '请输入页面对应的文件路径'
           }
         ]"
@@ -135,6 +135,14 @@ export default defineComponent({
       // 获取模块列表
       state.moduleList = await getAdminAccessModule()
     })
+
+    // 如果有moduleId,则为编辑操作
+    if (props.fields.id) {
+      Object.keys(modelRef).forEach((key) => (modelRef[key] = props.fields[key]))
+      if (modelRef.parentId == -1) {
+        modelRef.parentId = undefined
+      }
+    }
 
     const handleOk = async (e) => {
       e.preventDefault()
