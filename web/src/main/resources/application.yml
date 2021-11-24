@@ -14,7 +14,7 @@ spring:
       hibernate:
         enable_lazy_load_no_trans: true
     hibernate:
-      ddl-auto: update  #设置ddl模式
+      ddl-auto: validate  #设置ddl模式
   ##数据库连接设置
   datasource:
     url: jdbc:h2:file:./db/greys #配置h2数据库的连接地址

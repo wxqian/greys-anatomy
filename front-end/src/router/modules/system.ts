@@ -4,7 +4,8 @@ export default {
   'views/auth/system/access/index.vue': getAsyncPage('auth/system/access'), // 资源管理
   'views/auth/system/account/index.vue': getAsyncPage('auth/system/account'), // 账号管理
   'views/auth/system/dict/index.vue': getAsyncPage('auth/system/dict'), // 字典管理
-  'views/auth/system/role/index.vue': getAsyncPage('auth/system/role') // 角色管理
+  'views/auth/system/role/index.vue': getAsyncPage('auth/system/role'), // 角色管理
+  'views/app/terms/index.vue': getAsyncPage('app/terms') // app
 }
 
 // export const constantRouterComponents = {
