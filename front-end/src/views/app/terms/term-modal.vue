@@ -4,8 +4,10 @@
     :width="800"
     :title="fields.ip"
     :confirm-loading="confirmLoading"
-    :afterClose="remove"
     :okText="关闭"
+    :destroyOnClose="true"
+    :afterClose="beforeDestroy"
+    :footer="null"
     @ok="handleOk"
   >
     <div id="xterm" class="xterm" style="min-height: 400px"></div>
@@ -58,14 +60,14 @@ export default defineComponent({
 
     const initTerm = () => {
       term = new Terminal({
-        fontSize: 14,
+        fontSize: 20,
         cursorBlink: true,
-        cursorStyle: 'underline'
-        // theme: {
-        //   foreground: '#7e9192', //字体
-        //   background: '#002833', //背景色
-        //   cursor: 'help' //设置光标
-        // }
+        cursorStyle: 'underline',
+        theme: {
+          foreground: '#7e9192', //字体
+          background: '#002833', //背景色
+          cursor: 'help' //设置光标
+        }
       })
       const attachAddon = new AttachAddon(socket)
       const fitAddon = new FitAddon()
@@ -75,6 +77,7 @@ export default defineComponent({
       term.open(xtermDiv)
       fitAddon.fit()
       term.focus()
+      console.log('cuhshi')
       term.write('welcome!')
       prompt()
     }
@@ -94,17 +97,18 @@ export default defineComponent({
     const socketOnOpen = () => {
       socket.onopen = () => {
         // 链接成功后
+        console.log('open socket')
         initTerm()
       }
     }
     const socketOnClose = () => {
       socket.onclose = () => {
-        // console.log('close socket')
+        console.log('close socket')
       }
     }
     const socketOnError = () => {
       socket.onerror = () => {
-        // console.log('socket 链接失败')
+        console.log('socket 链接失败')
       }
     }
 
@@ -117,7 +121,6 @@ export default defineComponent({
       e.preventDefault()
       state.confirmLoading = true
       try {
-        beforeDestroy
         state.visible = false
         props?.callback?.()
       } catch (error) {
